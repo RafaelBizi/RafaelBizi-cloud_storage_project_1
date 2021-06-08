@@ -23,8 +23,30 @@ public class LoginPage {
     @FindBy(css="#submit-button")
     private WebElement submitButton;
 
-    public LoginPage(WebDriver webDriver){
+    @FindBy(id = "login-link")
+    private WebElement loginLink;
 
+    public String getInputUsername(){
+        return this.usernameField.getAttribute("value");
+    }
+
+    public void setInputUsername(String inputUsername){
+        this.usernameField.sendKeys(inputUsername);
+    }
+
+    public void setInputPassword(String inputPassword){
+        this.passwordField.sendKeys(inputPassword);
+    }
+
+    public String checkLoginPageExists(){
+        return this.loginLink.getText();
+    }
+
+    public void clickLoginButton(){
+        this.submitButton.click();
+    }
+
+    public LoginPage(WebDriver webDriver){
         PageFactory.initElements(webDriver, this);
         js = (JavascriptExecutor) webDriver;
     }

@@ -17,6 +17,10 @@ public final class ConstantsUtils {
     public static final String LASTNAME = "Bizi";
     public static final String USERNAME = "rafael";
     public static final String PASSWORD = "rafa12345";
+    public static final String URL = "http://www.rbtecnologias.com.br/";
+    public static final String EDIT_URL = "http://www.rbtecnologias.com.br/";
+    public static final String EDIT_USERNAME = "rafaelbizi";
+    public static final String EDIT_PASSWORD = "rafa12345";
 }
 
 

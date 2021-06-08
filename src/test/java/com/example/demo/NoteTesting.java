@@ -1,7 +1,13 @@
 package com.example.demo;
 
+import com.example.demo.mapper.NoteMapper;
 import com.example.demo.model.Notes;
+import com.example.demo.service.NoteService;
+import com.example.demo.service.implimentation.NoteServiceImpl;
 import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -10,12 +16,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @project cloud-storage-project-1
  */
 
-public class CRUDNoteTesting extends ApplicationTests{
+public class NoteTesting extends ApplicationTests{
+
+    @Autowired
+    private NoteMapper noteMapper;
 
     @Test
     public void createReadTest() throws InterruptedException {
-        String noteTitle = "Note title";
-        String noteDescription = "This is note to test.";
+        String noteTitle = "Note test";
+        String noteDescription = "Note testing description.";
         HomePage homePage= getHomePage();
         assertEquals("Home", driver.getTitle());
         createNote(noteTitle,noteDescription,homePage);
@@ -25,7 +34,7 @@ public class CRUDNoteTesting extends ApplicationTests{
         Assertions.assertEquals(noteTitle, note.getNoteTitle());
         Assertions.assertEquals(noteDescription, note.getNoteDescription());
         deleteNote(homePage);
-        Thread.sleep(4000);
+        Thread.sleep(500);
         homePage.logout();
     }
     @Test
@@ -57,13 +66,18 @@ public class CRUDNoteTesting extends ApplicationTests{
         createNote(noteTitle, noteDescription, homePage);
         homePage.openNotesTab();
         homePage = new HomePage(driver);
-        Thread.sleep(2000);
+        Thread.sleep(500);
         Assertions.assertFalse(homePage.noNotes(driver));
 
-        Thread.sleep(2000);
+        Thread.sleep(500);
         deleteNote(homePage);
 
-        Thread.sleep(2000);
+        NoteServiceImpl noteService = new NoteServiceImpl(noteMapper);
+        List<Notes> notesListResult = noteService.getAllNotes(1);
+        boolean isEmpty = notesListResult.isEmpty();
+        Assertions.assertEquals(true, isEmpty);
+
+        Thread.sleep(500);
         Assertions.assertTrue(homePage.noNotes(driver));
     }
 
@@ -75,6 +89,7 @@ public class CRUDNoteTesting extends ApplicationTests{
         homePage.saveNoteChanges();
         homePage.openNotesTab();
     }
+
     private void deleteNote(HomePage homePage) {
         homePage.deleteNote();
     }

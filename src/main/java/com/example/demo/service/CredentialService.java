@@ -6,11 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * @author RafaelBizi
- * @project cloud-storage-project-1
- */
-
 @Service
 public class CredentialService {
 
@@ -20,9 +15,11 @@ public class CredentialService {
         this.credentialMapper = credentialMapper;
     }
 
+
     public List<Credential> getCredentials(int userId) {
         return credentialMapper.getCredentials(userId);
     }
+
 
     public int createCredential(Credential credential) {
         return credentialMapper.insertCredential(credential);

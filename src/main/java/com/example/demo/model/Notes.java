@@ -16,7 +16,7 @@ public class Notes {
     private Integer userId;
 
     public Notes(String title, String description) {
-        this.noteTitle=title;
-        this.noteDescription=description;
+        this.noteTitle = title;
+        this.noteDescription = description;
     }
 }

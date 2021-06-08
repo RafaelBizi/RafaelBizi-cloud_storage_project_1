@@ -2,13 +2,11 @@ package com.example.demo;
 
 import com.example.demo.model.Credential;
 import com.example.demo.model.Notes;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -19,11 +17,22 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  * @project cloud-storage-project-1
  */
 
-public class HomePage {@FindBy(name = "logoutBtn")
-private WebElement logoutButton;
+public class HomePage {
+
+    @FindBy(name = "logoutBtn")
+    private WebElement logoutButton;
+
+    @FindBy(id = "uploadBtn")
+    private WebElement fileUpload;
 
     @FindBy(id = "fileUpload")
-    private WebElement fileUpload;
+    private WebElement chooseFile;
+
+    @FindBy(name = "viewBtn")
+    private WebElement viewBtn;
+
+    @FindBy(name = "deleteBtn")
+    private WebElement deleteBtn;
 
     @FindBy(name = "addNote")
     private WebElement addNewNoteBtn;
@@ -118,8 +127,20 @@ private WebElement logoutButton;
         js.executeScript("arguments[0].click();", aDeleteCredential);
     }
 
+    public void chooseFile(String path) {
+        chooseFile.sendKeys(path);
+    }
+
     public void uploadFile() {
         js.executeScript("arguments[0].click();", fileUpload);
+    }
+
+    public void viewFile() {
+        js.executeScript("arguments[0].click();", viewBtn);
+    }
+
+    public void deleteFile() {
+        js.executeScript("arguments[0].click();", deleteBtn);
     }
 
     public void addNewNote() {

@@ -10,16 +10,25 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author RafaelBizi
+ * @project cloud-storage-project-1
+ */
+
 @Service
 public class NoteServiceImpl implements NoteService {
     private Logger logger =  LoggerFactory.getLogger(NoteServiceImpl.class);
+
     @Autowired
     private NoteMapper noteMapper;
 
+    public NoteServiceImpl(NoteMapper noteMapper) {
+        this.noteMapper = noteMapper;
+    }
 
     @Override
     public int addNote(Notes note) {
-        logger.info("Note to add: "+note);
+        logger.info("Add note: " + note);
         return noteMapper.insertNote(note);
     }
 
@@ -31,7 +40,6 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public void updateNote(Notes note) {
          noteMapper.updateNote(note);
-
     }
 
     @Override

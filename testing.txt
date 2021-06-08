@@ -1,0 +1,1 @@
+it's a automation test in spring boot application, using Selenium and JUnit!

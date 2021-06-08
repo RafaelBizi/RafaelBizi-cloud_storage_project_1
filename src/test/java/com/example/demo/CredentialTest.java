@@ -1,31 +1,36 @@
 package com.example.demo;
 
+import com.example.demo.mapper.CredentialMapper;
 import com.example.demo.model.Credential;
+import com.example.demo.service.CredentialService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
+import static com.example.demo.utils.ConstantsUtils.*;
 
 /**
  * @author RafaelBizi
  * @project cloud-storage-project-1
  */
 
-public class CredentialCRUDTest extends ApplicationTests {
+public class CredentialTest extends ApplicationTests {
 
-    public static final String URL = "http://www.rbtecnologias.com.br/";
-    public static final String USERNAME = "rafaelbizi";
-    public static final String PASSWORD = "rafa12345";
-    public static final String EDIT_URL = "http://www.rbtecnologias.com.br/";
-    public static final String EDIT_USERNAME = "rafaelbizi";
-    public static final String EDIT_PASSWORD = "rafa12345";
+    @Autowired
+    CredentialMapper credentialMapper;
+
     @Test
     public void createCredentialTest() throws InterruptedException {
         HomePage homePage = getHomePage();
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         createAndVerifyCredential(URL, USERNAME, PASSWORD, homePage);
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         homePage.deleteCredential();
         homePage.logout();
     }
+
     @Test
     public void readUpdateCredentialTest() throws InterruptedException {
         HomePage homePage = getHomePage();
@@ -38,6 +43,12 @@ public class CredentialCRUDTest extends ApplicationTests {
         String newPassword = EDIT_PASSWORD;
         setCredentialFields(newUrl, newCredentialUsername, newPassword, homePage);
         homePage.saveCredentialChanges();
+
+        CredentialService credentialService = new CredentialService(credentialMapper);
+        List<Credential> credentials = credentialService.getCredentials(1);
+        boolean isEmpty = credentials.isEmpty();
+        Assertions.assertEquals(false, isEmpty);
+
         homePage.navToCredentialsTab();
         Credential modifiedCredential = homePage.getFirstCredential();
         Assertions.assertEquals(newUrl, modifiedCredential.getUrl());
@@ -48,22 +59,28 @@ public class CredentialCRUDTest extends ApplicationTests {
         homePage.deleteCredential();
         homePage.logout();
     }
+
     @Test
     public void deletionCredentialTest() throws InterruptedException {
         HomePage homePage = getHomePage();
         createCredential(URL, USERNAME, PASSWORD, homePage);
         createCredential(EDIT_URL, EDIT_USERNAME, EDIT_PASSWORD, homePage);
-        createCredential("http://www.google.com/", "google", "imana", homePage);
+        createCredential("http://www.gmail.com/", "teste3", "teste3", homePage);
         Assertions.assertFalse(homePage.noCredentials(driver));
-        homePage.deleteCredential();
-        homePage.navToCredentialsTab();
-        homePage.deleteCredential();
-        homePage.navToCredentialsTab();
-        homePage.deleteCredential();
-        homePage.navToCredentialsTab();
+        for (int i = 0; i<=2; i++){
+            homePage.deleteCredential();
+            homePage.navToCredentialsTab();
+            Thread.sleep(500);
+        }
         Assertions.assertTrue(homePage.noCredentials(driver));
         homePage.logout();
+
+        CredentialService credentialService = new CredentialService(credentialMapper);
+        List<Credential> credentials = credentialService.getCredentials(1);
+        boolean isEmpty = credentials.isEmpty();
+        Assertions.assertEquals(true, isEmpty);
     }
+
     private void createAndVerifyCredential(String url, String username, String password, HomePage homePage) throws InterruptedException {
         createCredential(url, username, password, homePage);
         homePage.navToCredentialsTab();
@@ -77,10 +94,9 @@ public class CredentialCRUDTest extends ApplicationTests {
         homePage.navToCredentialsTab();
         homePage.addNewCredential();
         setCredentialFields(url, username, password, homePage);
-        Thread.sleep(2000);
+        Thread.sleep(500);
         homePage.saveCredentialChanges();
-        Thread.sleep(4000);
-
+        Thread.sleep(500);
         homePage.navToCredentialsTab();
     }
 

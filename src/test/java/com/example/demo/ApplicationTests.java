@@ -1,19 +1,14 @@
 package com.example.demo;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import static com.example.demo.utils.ConstantsUtils.USERNAME;
-import static com.example.demo.utils.ConstantsUtils.PASSWORD;
-import static com.example.demo.utils.ConstantsUtils.FIRSTNAME;
-import static com.example.demo.utils.ConstantsUtils.LASTNAME;
+import static com.example.demo.utils.ConstantsUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -23,15 +18,19 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  */
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ApplicationTests {
 
     protected static WebDriver driver;
     @LocalServerPort
     private int port;
 
+    private SignupPage signupPage;
+    private LoginPage loginPage;
+
     @BeforeAll
     static void beforeAll(){
-        WebDriverManager.chromedriver().setup();
+         WebDriverManager.chromedriver().setup();
     }
 
     @BeforeEach
@@ -47,6 +46,7 @@ class ApplicationTests {
     }
 
     @Test
+    @Order(1)
     public void userNotAuthorizedToAccess(){
         driver.get("http://localhost:" + this.port + "/home");
         assertFalse(driver.getTitle() == "Home");
@@ -56,6 +56,36 @@ class ApplicationTests {
     }
 
     @Test
+    @Order(2)
+    public void testSignupSuccess() throws InterruptedException {
+        driver.get("http://localhost:" + port + "/signup");
+        signupPage = new SignupPage(driver);
+        signupPage.setInputFirstName(FIRSTNAME);
+        signupPage.setInputLastName(LASTNAME);
+        signupPage.setInputUserName(USERNAME);
+        signupPage.setInputPassword(PASSWORD);
+        assertEquals(FIRSTNAME, signupPage.getInputFirstName());
+        assertEquals(LASTNAME, signupPage.getInputLastName());
+        assertEquals(USERNAME,signupPage.getInputUserName());
+        assertEquals(PASSWORD,signupPage.getInputPassword());
+        signupPage.clickSubmit();
+    }
+
+    @Test
+    @Order(3)
+    public void testLoginSuccess() throws InterruptedException {
+        driver.get("http://localhost:" + port + "/login");
+        loginPage = new LoginPage(driver);
+        assertEquals("Click here to sign up",loginPage.checkLoginPageExists());
+        Boolean exists = driver.findElements(By.id("login-link")).size() != 0;
+        assertEquals(true, exists);
+        loginPage.setInputUsername(USERNAME);
+        loginPage.setInputPassword(PASSWORD);
+        loginPage.clickLoginButton();
+    }
+
+    @Test
+    @Order(4)
     public void userSignupAndLogin() throws InterruptedException {
 
         signup();
@@ -63,7 +93,7 @@ class ApplicationTests {
         assertEquals("Home", driver.getTitle());
 
         HomePage homePage = new HomePage(driver);
-        Thread.sleep(2000);
+        Thread.sleep(500);
         homePage.logout();
 
         driver.get("http://localhost:" + this.port + "/home");
@@ -74,7 +104,6 @@ class ApplicationTests {
 
     public void signup(){
         driver.get("http://localhost:" + this.port + "/signup");
-
         SignupPage signupPage = new SignupPage(driver);
         signupPage.signUp(FIRSTNAME,LASTNAME,USERNAME,PASSWORD);
     }
@@ -88,7 +117,5 @@ class ApplicationTests {
          login();
          return new HomePage(driver);
      }
-
-
 
 }

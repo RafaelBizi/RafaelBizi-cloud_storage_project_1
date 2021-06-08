@@ -26,6 +26,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
+/**
+ * @author RafaelBizi
+ * @project cloud-storage-project-1
+ */
+
 @Service
 public class FileServiceImp implements FileService {
     private Logger logger =  LoggerFactory.getLogger(FileServiceImp.class);
@@ -34,9 +39,10 @@ public class FileServiceImp implements FileService {
     @Autowired
     private FileMapper fileMapper;
 
-    public FileServiceImp(FileStoreConfig fileLocation) {
+    public FileServiceImp(FileStoreConfig fileLocation, FileMapper fileMapper) {
+        this.fileMapper = fileMapper;
         this.fileLocation = Paths.get(fileLocation.getUploadDir()).toAbsolutePath().normalize();
-        logger.info("Location is: ++++++++++++++++++++++++++++++++++++++++"+this.fileLocation);
+        logger.info("Location is: "+this.fileLocation);
         try{
             Files.createDirectories(this.fileLocation);
             logger.info("Location of the file is: ", this.fileLocation);
