@@ -21,6 +21,8 @@ public interface FileService {
 
     File findFile(String filename);
 
+    File getFileById(Integer idFile);
+
     List<File> getAllFiles(int userId);
 
     Object deleteFile(int id);

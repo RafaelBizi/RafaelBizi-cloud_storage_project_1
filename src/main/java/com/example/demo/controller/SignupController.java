@@ -36,7 +36,7 @@ public class SignupController {
     public String signupUser(@ModelAttribute User user, RedirectAttributes redirectAttributes){
         String signupError = null;
         if(!userService.isUserAvailable(user.getUsername())){
-            signupError = "The user already exist";
+            signupError = "The user already exists";
 
         }
         if(signupError == null){
@@ -48,7 +48,7 @@ public class SignupController {
             if(signupError == null){
 
                 redirectAttributes.addFlashAttribute("signupSuccess", true);
-                redirectAttributes.addFlashAttribute("successMessage", "Account have been created. Please login to continue");
+                redirectAttributes.addFlashAttribute("successMessage", "Account created properly.");
                 return "redirect:/login";
             }
         }

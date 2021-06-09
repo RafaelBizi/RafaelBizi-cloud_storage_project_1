@@ -91,6 +91,11 @@ public class FileServiceImp implements FileService {
     }
 
     @Override
+    public File getFileById(Integer idFile){
+        return fileMapper.getFileById(idFile);
+    }
+
+    @Override
     public List<File> getAllFiles(int userId){
         return fileMapper.getAllFiles(userId);
     }

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.model.File;
 import com.example.demo.model.User;
 import com.example.demo.service.FileService;
 import com.example.demo.service.UserService;
@@ -73,8 +74,8 @@ public class FileController {
 
     @GetMapping("/delete/{id}")
     public String deleteFile(@PathVariable int id, Model model){
-        model.addAttribute("successMessage", "The fileId=" + fileService.deleteFile(id) +
-                " was deleted properly.");
+        File file = fileService.getFileById(id);
+        model.addAttribute("successMessage", "The filename = " + file.getFileName() + " was deleted properly.");
         return "result";
     }
 

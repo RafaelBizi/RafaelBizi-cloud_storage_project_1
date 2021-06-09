@@ -9,14 +9,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FileStoreConfig {
 
-    private String uploadDir = "./uploads/";
+    private String pathUpload = "./uploads/";
 
     public String getUploadDir() {
-        return uploadDir;
+        return pathUpload;
     }
 
-    public void setUploadDir(String uploadDir) {
-        this.uploadDir = uploadDir;
+    public void setUploadDir(String pathUpload) {
+        this.pathUpload = pathUpload;
     }
 }
 

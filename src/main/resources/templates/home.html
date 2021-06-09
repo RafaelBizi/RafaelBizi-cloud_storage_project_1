@@ -69,7 +69,7 @@
                                         <a name="viewBtn" th:href="@{'/file/' +${file.getFileName}}" target="_blank" class="btn btn-success">View</a>
                                         <a name="deleteBtn" th:href="@{'/file/delete/' +${file.getFileId}}" class="btn btn-danger">Delete</a>
                                     </td>
-                                    <th scope="row" th:text="${file.getFileName}">ExampleFile.txt</th>
+                                    <th scope="row" th:text="${file.getFileName}">example.txt</th>
                                 </tr>
                                 </tbody>
                             </table>
@@ -205,17 +205,17 @@
         <script th:src="@{/js/popper.min.js}"></script>
         <script th:src="@{/js/bootstrap.min.js}"></script>
 
-        <!--For opening the note modal-->
+        <!--Open the note modal-->
         <script type="text/javascript">
         filevalidation = () => {
-        const fi = document.getElementById('fileUpload');
+        const fileElement = document.getElementById('fileUpload');
         document.getElementById("uploadBtn").disabled = true;
-        // Check if any file is selected.
-        if (fi.files.length > 0) {
-            for (const i = 0; i <= fi.files.length - 1; i++) {
 
-                const fsize = fi.files.item(i).size;
-                const file = Math.round((fsize / 1024));
+        // Verify if there is any file selected in the table.
+        if (fileElement.files.length > 0) {
+            for (const i = 0; i <= fileElement.files.length-1; i++) {
+                const fileSize = fileElement.files.item(i).size;
+                const file = Math.round((fileSize/1024));
                 // The size of the file.
                 if (file >= 10000) {
                     alert(
@@ -243,6 +243,7 @@
                 $('#credential-password').val(credential && credential.decryptedPassword ? credential.decryptedPassword : decryptedPassword);
                 $('#credentialModal').modal('show');
             }
+
         </script>
     </body>
 </html>
